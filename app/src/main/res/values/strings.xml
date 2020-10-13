@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Open Strava Flyby</string>
+    <string name="not_strava_link">It\'s not a Strava share link!</string>
+    <string name="http_error">Error while getting activity id. Try again later.</string>
+</resources>
