@@ -2,4 +2,5 @@
     <string name="app_name">Open Strava Flyby</string>
     <string name="not_strava_link">It\'s not a Strava share link!</string>
     <string name="http_error">Error while getting activity id. Try again later.</string>
+    <string name="disclaimer">DISCLAIMER: If you see \"Error: No flyby data found.\" you need to change Flyby Privacy setting to \"Everyone\" on Strava. Only users with this setting can be displayed on Flyby.</string>
 </resources>

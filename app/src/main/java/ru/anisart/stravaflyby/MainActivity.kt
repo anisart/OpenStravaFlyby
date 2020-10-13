@@ -31,30 +31,38 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val stravaUrl = parseShortUrl(text)
+        when (val stravaUrl = parseShortUrl(text)) {
+            null -> {
+                when (val activityId = parseFullUrl(text)) {
+                    null -> {
+                        notMatch()
+                        return
+                    }
+                    else -> {
+                        openFlyby(activityId)
+                    }
+                }
+            }
+            else -> {
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                    .url(stravaUrl)
+                    .build()
+                client.newCall(request)
+                    .enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            System.err.println(e)
+                            httpError()
+                        }
 
-        if (stravaUrl == null) {
-            notMatch()
-            return
+                        override fun onResponse(call: Call, response: Response) {
+                            val activityId = response.body?.string()?.let { parseFullUrl(it) }
+                            response.close()
+                            openFlyby(activityId)
+                        }
+                    })
+            }
         }
-
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(stravaUrl)
-            .build()
-        client.newCall(request)
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    System.err.println(e)
-                    httpError()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    val activityId = response.body()?.string()?.let { parseFullUrl(it) }
-                    response.close()
-                    openFlyby(activityId)
-                }
-            })
     }
 
     private fun notMatch() {
